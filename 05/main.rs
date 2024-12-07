@@ -73,6 +73,40 @@ fn solve_part1(rules: &Rules, input: &str) -> i32 {
     result
 }
 
+fn solve_part2(rules: &Rules, input: &str) -> i32 {
+    let inputs = input.split("\n").collect::<Vec<&str>>();
+    let mut result = 0;
+    for input in inputs.iter() {
+        if *input == "" {
+            break;
+        }
+        let mut data = input
+            .split(",")
+            .map(|x| x.parse::<i32>().unwrap())
+            .collect::<Vec<i32>>();
+        let mut is_valid: bool = true;
+        for i in 0..data.len() {
+            for j in i + 1..data.len() {
+                let rule = Rule::new(data[j], data[i]);
+                if rules.rule_exists(&rule) {
+                    let temp = data[j];
+                    data[j] = data[i];
+                    data[i] = temp;
+                    is_valid = false;
+                    continue;
+                }
+            }
+        }
+        if !is_valid {
+            println!("{input}");
+            println!("{:?}", data);
+            let len = data.len();
+            result += data[(len / 2) as usize];
+        }
+    }
+    result
+}
+
 fn main() -> std::io::Result<()> {
     let file_name = "input.txt";
     let mut file = File::open(file_name)?;
@@ -83,7 +117,8 @@ fn main() -> std::io::Result<()> {
     let rules = Rules::new(rules);
 
     let sol1 = solve_part1(&rules, input);
-    println!("{sol1}");
+    let sol2 = solve_part2(&rules, input);
+    println!("{sol1}\n{sol2}");
 
     Ok(())
 }
