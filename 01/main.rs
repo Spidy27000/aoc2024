@@ -56,7 +56,6 @@ fn solve_part1(content: String) -> i32 {
 
 fn main() -> io::Result<()> {
     let file_name = "input.txt";
-
     let mut f = File::open(file_name)?;
     let mut content = String::new();
 
