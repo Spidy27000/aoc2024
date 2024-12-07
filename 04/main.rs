@@ -42,6 +42,39 @@ fn solve_part1(data: &[[char; SIZE]; SIZE]) -> i32 {
     }
     ans
 }
+fn solve_part2(data: &[[char; SIZE]; SIZE]) -> i32 {
+    let mut ans = 0;
+    for j in 0..SIZE {
+        for i in 0..SIZE {
+            if i <= 0 || i >= SIZE - 1 || j <= 0 || j >= SIZE - 1 {
+                continue;
+            }
+            if data[j][i] == 'A' {
+                println!("{i},{j}");
+                // positive
+                let mut positive = [' '; 3];
+                positive[0] = data[((j as i32) + 1) as usize][((i as i32) - 1) as usize];
+                positive[1] = data[j][i];
+                positive[2] = data[((j as i32) - 1) as usize][((i as i32) + 1) as usize];
+
+                // negitive
+                let mut negitive = [' '; 3];
+                negitive[0] = data[((j as i32) - 1) as usize][((i as i32) - 1) as usize];
+                negitive[1] = data[j][i];
+                negitive[2] = data[((j as i32) + 1) as usize][((i as i32) + 1) as usize];
+
+                let positive = String::from_iter(positive.iter());
+                let negitive = String::from_iter(negitive.iter());
+                if (&positive == "MAS" || &positive == "SAM")
+                    && (&negitive == "MAS" || &negitive == "SAM")
+                {
+                    ans += 1;
+                }
+            }
+        }
+    }
+    ans
+}
 
 fn main() -> std::io::Result<()> {
     let file_name = "input.txt";
@@ -63,7 +96,7 @@ fn main() -> std::io::Result<()> {
     }
 
     let sol1 = solve_part1(&data);
-    //let sol2 = solve_part1(&data);
-    println!("{sol1}");
+    let sol2 = solve_part2(&data);
+    println!("{sol1}\n{sol2}");
     Ok(())
 }
